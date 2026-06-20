@@ -1,0 +1,76 @@
+# MetaGPT项目管理文档生成工具使用说明
+
+## 一、项目概述
+本工具基于MetaGPT二次开发，实现了根据项目需求自动生成全套项目管理文档的功能，包含需求分析、系统设计、实现方案、测试计划、验收标准等全流程文档。
+
+## 二、核心文件说明
+1. `tools/lifecycle_orchestrator.py` - 主入口程序，负责协调流程，读取需求文件，调用Agent生成文档
+2. `tools/lifecycle_agent.py` - 文档生成Agent，负责调用LLM生成各阶段的项目文档
+3. `projects/[项目名]/00_context.md` - 项目需求文件，需要先填写好项目的详细需求
+
+## 三、使用方法
+### 1. 准备工作
+- 进入项目目录：`cd /app/metagpt`
+- 配置API密钥：在`config/config2.yaml`中填写你的LLM API密钥（支持OpenAI、Anthropic、通义千问等）
+- 编写需求：在`projects/[你的项目目录]/00_context.md`中填写完整的项目需求描述
+
+### 2. 执行生成命令
+```bash
+# 基础用法，生成全部文档
+python tools/lifecycle_orchestrator.py --project projects/demo-p1
+
+# 指定生成特定阶段的文档
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage requirement
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage design
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage implementation
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage testing
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage acceptance
+```
+
+## 四、支持的生成阶段说明
+| 阶段参数 | 生成文档 | 说明 |
+|---------|---------|------|
+| requirement | 0X_requirement.md | 需求分析文档，包含功能需求、非功能需求、用户故事、需求优先级 |
+| design | 0X_design.md | 系统设计文档，包含架构设计、模块划分、数据库设计、接口设计、技术选型 |
+| implementation | 0X_implementation.md | 实现方案文档，包含开发计划、技术实现细节、编码规范、依赖说明 |
+| testing | 0X_testing.md | 测试计划文档，包含测试策略、测试用例、性能测试方案、安全测试方案 |
+| acceptance | 0X_acceptance.md | 验收标准文档，包含功能验收标准、性能验收标准、上线标准、运维方案 |
+| 不指定stage | 所有文档 | 顺序生成所有阶段的项目文档 |
+
+## 五、输出文件说明
+生成的所有文档都会保存在对应的项目目录下：
+- `projects/[项目名]/0X_requirement.md` - 需求文档
+- `projects/[项目名]/0X_design.md` - 设计文档
+- `projects/[项目名]/0X_implementation.md` - 实现文档
+- `projects/[项目名]/0X_testing.md` - 测试文档
+- `projects/[项目名]/0X_acceptance.md` - 验收文档
+- `projects/[项目名]/decisions.md` - 项目决策记录
+- `projects/[项目名]/reports/` - 项目报告目录
+
+## 六、配置说明
+### config/config2.yaml配置项：
+```yaml
+llm:
+  provider: openai # 可选 openai / anthropic / qwen / ollama等
+  api_key: "你的API密钥"
+  model: "gpt-4o" # 推荐使用大模型，生成质量更高
+  base_url: "https://api.openai.com/v1" # 自定义API地址
+
+project:
+  output_dir: "projects" # 项目文档输出目录
+  language: "zh-CN" # 文档输出语言，可选 zh-CN / en-US
+```
+
+## 七、注意事项
+1. 配置文件`config/config2.yaml`已经加入.gitignore，不会被提交到代码仓库，安全保存API密钥
+2. 建议使用GPT-4o、Claude 3.5 Sonnet等高级大模型，生成的文档质量更高
+3. 生成过程中会自动保存中间结果，中断后再次执行会从上次中断的地方继续
+4. 生成的文档可以根据实际项目情况手动调整修改
+
+## 八、示例
+生成demo-p1项目的全套文档：
+```bash
+python tools/lifecycle_orchestrator.py --project projects/demo-p1
+```
+
+生成后可以在`projects/demo-p1/`目录下查看所有生成的项目文档。
