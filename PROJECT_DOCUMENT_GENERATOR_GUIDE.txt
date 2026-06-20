@@ -25,6 +25,10 @@ python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage design
 python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage implementation
 python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage testing
 python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage acceptance
+
+# 生成项目周报/月报
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage weekly_report --report-date 2026-06-20
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage monthly_report --report-date 2026-06
 ```
 
 ## 四、支持的生成阶段说明
@@ -35,6 +39,8 @@ python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage accept
 | implementation | 0X_implementation.md | 实现方案文档，包含开发计划、技术实现细节、编码规范、依赖说明 |
 | testing | 0X_testing.md | 测试计划文档，包含测试策略、测试用例、性能测试方案、安全测试方案 |
 | acceptance | 0X_acceptance.md | 验收标准文档，包含功能验收标准、性能验收标准、上线标准、运维方案 |
+| weekly_report | weekly_report_YYYYMMDD.md | 项目周报，包含本周工作进展、问题风险、下周工作计划 |
+| monthly_report | monthly_report_YYYYMM.md | 项目月报，包含本月工作完成情况、里程碑达成、团队绩效、下月规划 |
 | 不指定stage | 所有文档 | 顺序生成所有阶段的项目文档 |
 
 ## 五、输出文件说明
@@ -44,6 +50,8 @@ python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage accept
 - `projects/[项目名]/0X_implementation.md` - 实现文档
 - `projects/[项目名]/0X_testing.md` - 测试文档
 - `projects/[项目名]/0X_acceptance.md` - 验收文档
+- `projects/[项目名]/weekly_report_YYYYMMDD.md` - 项目周报
+- `projects/[项目名]/monthly_report_YYYYMM.md` - 项目月报
 - `projects/[项目名]/decisions.md` - 项目决策记录
 - `projects/[项目名]/reports/` - 项目报告目录
 
@@ -68,9 +76,27 @@ project:
 4. 生成的文档可以根据实际项目情况手动调整修改
 
 ## 八、示例
-生成demo-p1项目的全套文档：
+### 1. 生成全套项目文档
 ```bash
 python tools/lifecycle_orchestrator.py --project projects/demo-p1
+```
+
+### 2. 生成指定日期的项目周报
+```bash
+# 生成2026年6月20日所在周的周报
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage weekly_report --report-date 2026-06-20
+
+# 不指定report-date则默认生成当周周报
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage weekly_report
+```
+
+### 3. 生成指定月份的项目月报
+```bash
+# 生成2026年6月的月报
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage monthly_report --report-date 2026-06
+
+# 不指定report-date则默认生成当月月报
+python tools/lifecycle_orchestrator.py --project projects/demo-p1 --stage monthly_report
 ```
 
 生成后可以在`projects/demo-p1/`目录下查看所有生成的项目文档。
