@@ -3,8 +3,13 @@
 
 import os
 from pathlib import Path
+import logging
 
-from loguru import logger
+try:
+    from loguru import logger
+except ImportError:  # pragma: no cover - fallback for lightweight local environments
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger("metagpt")
 
 import metagpt
 

@@ -153,9 +153,7 @@ allure-results
 .vscode
 
 key.yaml
-config/config2.yaml
-config/config2.bak.yaml
-config/vault.yaml
+config/*
 # SSH密钥
 id_*
 *.pub
